@@ -1,0 +1,86 @@
+<section id="accueil" class="hero">
+    <div class="hero-content">
+        <h1>Hackathon ONEA 2025</h1>
+        <p>Innover pour l'eau et l'assainissement</p>
+        
+        <div class="countdown">
+            <!-- Message dynamique -->
+            <h3 class="countdown-message">⏳ Les inscriptions s'ouvrent bientôt...</h3>
+
+            <!-- Timer -->
+            <div class="countdown-timer">
+                <div class="countdown-item">
+                    <span class="countdown-number" id="days">00</span>
+                    <span class="countdown-label">Jours</span>
+                </div>
+                <div class="countdown-item">
+                    <span class="countdown-number" id="hours">00</span>
+                    <span class="countdown-label">Heures</span>
+                </div>
+                <div class="countdown-item">
+                    <span class="countdown-number" id="minutes">00</span>
+                    <span class="countdown-label">Minutes</span>
+                </div>
+                <div class="countdown-item">
+                    <span class="countdown-number" id="seconds">00</span>
+                    <span class="countdown-label">Secondes</span>
+                </div>
+            </div>
+
+            <!-- Barre de progression -->
+            <div class="progress-container">
+                <div id="progress-bar"></div>
+            </div>
+        </div>
+
+        <a href="#inscription" class="btn-primary">S'inscrire maintenant</a>
+    </div>
+</section>
+
+
+<script>
+// debut Compte à rebours dynamique
+        
+        function updateCountdown() {
+            const hackathonStartDate = new Date('2025-09-10T09:00:00').getTime();
+            const hackathonEndDate = new Date('2025-09-10T18:00:00').getTime();
+
+            const now = new Date().getTime();
+            let distance, message;
+
+            if (now < hackathonStartDate) {
+                distance = hackathonStartDate - now;
+                message = "⏳ Les inscriptions s'ouvrent bientôt... :";
+                document.getElementById('progress-bar').style.width = "0%";
+
+            } else if (now >= hackathonStartDate && now <= hackathonEndDate) {
+                distance = hackathonEndDate - now;
+                message = "🚀 Inscriptions ouvertes ! Temps restant avant fermeture :";
+
+                const totalDuration = hackathonEndDate - hackathonStartDate;
+                const elapsed = now - hackathonStartDate;
+                const progressPercent = (elapsed / totalDuration) * 100;
+                document.getElementById('progress-bar').style.width = progressPercent + "%";
+
+            } else {
+                document.querySelector('.countdown').innerHTML =
+                    '<h3>✅ Les inscriptions sont terminées. Merci à tous les participants !</h3>';
+                return;
+            }
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.querySelector('.countdown-message').textContent = message;
+            document.getElementById('days').textContent = days.toString().padStart(2, '0');
+            document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
+            document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
+            document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
+        }
+
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
+
+</script>

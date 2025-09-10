@@ -1,0 +1,94 @@
+        <section id="inscription" class="registration">
+            <div class="container">
+                <h2 class="fade-in">Inscription au Hackathon</h2>
+                <div class="form-container fade-in">
+                    <form id="registrationForm">
+                        <div class="form-group">
+                            <label for="nom">Nom complet *</label>
+                            <input type="text" id="nom" name="nom" required>
+                            <div class="error-message" id="nom-error">Veuillez saisir votre nom complet</div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="email">Email *</label>
+                            <input type="email" id="email" name="email" required>
+                            <div class="error-message" id="email-error">Veuillez saisir une adresse email valide</div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="telephone">Téléphone *</label>
+                            <input type="tel" id="telephone" name="telephone" required>
+                            <div class="error-message" id="telephone-error">Veuillez saisir votre numéro de téléphone</div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="competences">Compétences principales</label>
+                            <select id="competences" name="competences">
+                                <option value="">Sélectionnez votre domaine</option>
+                                <option value="developpement">Développement (Web/Mobile)</option>
+                                <option value="design">Design UI/UX</option>
+                                <option value="data">Data Science/IA</option>
+                                <option value="iot">IoT/Hardware</option>
+                                <option value="business">Business/Marketing</option>
+                                <option value="autre">Autre</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="equipe">Nom de votre équipe (optionnel)</label>
+                            <input type="text" id="equipe" name="equipe" placeholder="Si vous avez déjà une équipe">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="projet">Idée de projet (optionnel)</label>
+                            <textarea id="projet" name="projet" rows="4" placeholder="Décrivez brièvement votre idée de projet"></textarea>
+                        </div>
+                        
+                        <button type="submit" class="btn-submit">S'inscrire au Hackathon</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+        <div id="inscription-message" class="inscription-message"></div>
+
+
+
+<script>
+
+function toggleInscriptionVisibility() {
+    const hackathonStartDate = new Date('2025-09-10T09:00:00').getTime();
+    const hackathonEndDate = new Date('2025-09-10T18:00:00').getTime();
+    const now = new Date().getTime();
+
+    const inscriptionSection = document.getElementById('inscription');
+    const inscriptionButton = document.querySelector('.btn-primary');
+    const inscriptionMessage = document.getElementById('inscription-message');
+
+    if (now >= hackathonStartDate && now <= hackathonEndDate) {
+        // Période active → afficher formulaire + bouton
+        inscriptionSection.style.display = "block";
+        if (inscriptionButton) inscriptionButton.style.display = "inline-block";
+        inscriptionMessage.style.display = "none";
+        inscriptionMessage.textContent = "";
+
+    } else if (now < hackathonStartDate) {
+        // Avant le début → masquer formulaire et bouton
+        inscriptionSection.style.display = "none";
+        if (inscriptionButton) inscriptionButton.style.display = "none";
+        inscriptionMessage.style.display = "block";
+        inscriptionMessage.textContent = "⏳ Les inscriptions ne sont pas encore ouvertes. Revenez le 10 septembre à 9h00.";
+
+    } else {
+        // Après la fin → masquer formulaire et bouton
+        inscriptionSection.style.display = "none";
+        if (inscriptionButton) inscriptionButton.style.display = "none";
+        inscriptionMessage.style.display = "block";
+        inscriptionMessage.textContent = "✅ Les inscriptions sont maintenant closes. Merci à tous les participants !";
+    }
+}
+
+// Vérification immédiate + mise à jour toutes les minutes
+toggleInscriptionVisibility();
+setInterval(toggleInscriptionVisibility, 1000);
+
+</script>
