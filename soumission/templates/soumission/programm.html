@@ -1,38 +1,24 @@
 <section id="programme" class="program">
-            <div class="container">
-                <h2 class="fade-in">Programme du Hackathon</h2>
-                <div class="timeline">
-                    <div class="timeline-item">
-                        <div class="timeline-content">
-                            <div class="timeline-date">Vendredi 15 Mars 2025</div>
-                            <div class="timeline-title">Lancement officiel</div>
-                            <p>Cérémonie d'ouverture, présentation des défis, networking et formation des équipes. Présentation des mentors et des ressources disponibles.</p>
+    <div class="container">
+        {% if hackathon %}
+            <h2 class="fade-in">Programme du Hackathon {{ hackathon.nom }}</h2>
+            <div class="timeline">
+                {% for item in programmes %}
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-date">
+                            {{ item.dateProgramme|date:"l d F Y" }}
                         </div>
-                    </div>
-                    
-                    <div class="timeline-item">
-                        <div class="timeline-content">
-                            <div class="timeline-date">Samedi 16 Mars 2025</div>
-                            <div class="timeline-title">Formation des équipes</div>
-                            <p>Constitution définitive des équipes, brainstorming, élaboration des concepts et début du développement. Sessions de mentorat individualisé.</p>
-                        </div>
-                    </div>
-                    
-                    <div class="timeline-item">
-                        <div class="timeline-content">
-                            <div class="timeline-date">Dimanche 17 Mars 2025</div>
-                            <div class="timeline-title">Développement intensif</div>
-                            <p>Journée complète de développement avec support technique continu. Ateliers thématiques et sessions d'accompagnement par les experts.</p>
-                        </div>
-                    </div>
-                    
-                    <div class="timeline-item">
-                        <div class="timeline-content">
-                            <div class="timeline-date">Lundi 18 Mars 2025</div>
-                            <div class="timeline-title">Démo finale & Prix</div>
-                            <p>Présentations finales devant le jury, évaluation des projets et remise des prix. Cérémonie de clôture et perspectives de développement.</p>
-                        </div>
+                        <div class="timeline-title">{{ item.programme }}</div>
+                        <p>{{ item.description }}</p>
                     </div>
                 </div>
+                {% empty %}
+                <p>Aucun programme disponible pour ce hackathon.</p>
+                {% endfor %}
             </div>
-        </section>
+        {% else %}
+            <p>Aucun hackathon actif trouvé.</p>
+        {% endif %}
+    </div>
+</section>

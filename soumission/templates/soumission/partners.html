@@ -1,15 +1,17 @@
 <section id="partenaires" class="partners">
-            <div class="container">
-                <h2 class="fade-in">Nos Partenaires</h2>
-                <div class="partners-grid fade-in">
-                    <div class="partner-logo">🏛️<br>Ministère de l'Eau</div>
-                    <div class="partner-logo">🏢<br>World Bank</div>
-                    <div class="partner-logo">🌍<br>UNICEF</div>
-                    <div class="partner-logo">💻<br>Tech Hubs BF</div>
-                    <div class="partner-logo">🎓<br>Université de Ouaga</div>
-                    <div class="partner-logo">⚡<br>Orange Burkina</div>
-                    <div class="partner-logo">📱<br>Moov Africa</div>
-                    <div class="partner-logo">🚀<br>StartUp Burkina</div>
+    <div class="container">
+        <h2 class="fade-in">Nos Partenaires</h2>
+        <div class="partners-grid fade-in">
+            {% for data in partenairs %}
+                <div class="partner-logo">
+                    {% if data.icon %}
+                        <img src="{{ data.icon.url }}" alt="{{ data.nom }}" style="width:128px; height:128px; object-fit:contain;">
+                    {% else %}
+                        🏛️
+                    {% endif %}
+                    <br>{{ data.nom }}
                 </div>
-            </div>
-        </section>
+            {% endfor %}
+        </div>
+    </div>
+</section>

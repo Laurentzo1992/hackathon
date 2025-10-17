@@ -1,8 +1,18 @@
+        <div id="succes-message" style="margin-top:20px;"></div>
         <section id="inscription" class="registration">
             <div class="container">
                 <h2 class="fade-in">Inscription au Hackathon</h2>
                 <div class="form-container fade-in">
-                    <form id="registrationForm">
+                    <form id="registrationForm" action="{% url 'inscription_hackathon' %}" method="POST" enctype="multipart/form-data">
+
+                        <div class="form-group">
+                            <label for="hackaton">Hackathon * </label>
+                            <select id="hackaton" name="hackaton" required>
+                                <option value="">Sélectionnez le Hackathon</option>
+                            </select>
+                        </div>
+
+
                         <div class="form-group">
                             <label for="nom">Nom complet *</label>
                             <input type="text" id="nom" name="nom" required>
@@ -14,11 +24,65 @@
                             <input type="email" id="email" name="email" required>
                             <div class="error-message" id="email-error">Veuillez saisir une adresse email valide</div>
                         </div>
+
+                        <div class="form-group">
+                            <label for="password">Mot de passe</label>
+                            <input type="password" id="password" name="password" required>
+                            <div class="error-message" id="password-error">Veuillez saisir une mot de passe</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="password2">Confirmer mot de passe</label>
+                            <input type="password" id="password2" name="password2" required>
+                            <div class="error-message" id="password2-error">Veuillez confirmer votre mot de passe</div>
+                        </div>
                         
                         <div class="form-group">
                             <label for="telephone">Téléphone *</label>
                             <input type="tel" id="telephone" name="telephone" required>
                             <div class="error-message" id="telephone-error">Veuillez saisir votre numéro de téléphone</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="adresse">Addresse</label>
+                            <input type="texte" id="adresse" name="adresse">
+                            <div class="error-message" id="adresse-error">Veuillez saisir votre adresse</div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="birth_date">Date de naissance *</label>
+                            <input type="date" id="birth_date" name="birth_date" required>
+                            <div class="error-message" id="birth_date-error">Date de naissance</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="numeroCarteIdentite">Numero identité * </label>
+                            <input type="texte" id="numeroCarteIdentite" name="numeroCarteIdentite" required>
+                            <div class="error-message" id="numeroCarteIdentite-error">Numero de la carte d'identité</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="dateDelivrance">Date de délivrance * </label>
+                            <input type="date" id="dateDelivrance" name="dateDelivrance" required>
+                            <div class="error-message" id="dateDelivrance-error">Numero de la carte d'identité</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="nationalite">Nationalité * </label>
+                            <input type="texte" id="nationalite" name="nationalite" required>
+                            <div class="error-message" id="nationalite-error">Nationalité</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="niveauEtude">Niveau d'etude</label>
+                            <select id="niveauEtude" name="niveauEtude">
+                                <option value="">Sélectionnez votre niveau</option>
+                                <option value="bepc">BEPC</option>
+                                <option value="bac">BAC</option>
+                                <option value="ing">LICENCE/INGENIEUR DE TRAVAUX</option>
+                                <option value="master">MASTER</option>
+                                <option value="doctorat">DOCTORAT</option>
+                            </select>
                         </div>
                         
                         <div class="form-group">
@@ -35,13 +99,32 @@
                         </div>
                         
                         <div class="form-group">
-                            <label for="equipe">Nom de votre équipe (optionnel)</label>
+                            <label for="equipe">Nom de votre équipe</label>
                             <input type="text" id="equipe" name="equipe" placeholder="Si vous avez déjà une équipe">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="situationProfessionnelle">Situation professionel</label>
+                            <input type="text" id="situationProfessionnelle" name="situationProfessionnelle">
                         </div>
                         
                         <div class="form-group">
-                            <label for="projet">Idée de projet (optionnel)</label>
+                            <label for="projet">Idée de projet</label>
                             <textarea id="projet" name="projet" rows="4" placeholder="Décrivez brièvement votre idée de projet"></textarea>
+                        </div>
+
+
+                        <div class="form-group">
+                            <label for="cv">Importer votre CV (PDF max 2Mo)</label>
+                            <input type="file" id="cv" name="cv" accept=".pdf" required>
+                            <div class="error-message" id="cv-error">Veuillez importer un fichier valide</div>
+                            </div>
+
+                        <!-- Nouveau champ fichier 2 -->
+                        <div class="form-group">
+                            <label for="dossier_projet">Importer le resumé de votre projet(PDF max 2Mo)</label>
+                            <input type="file" id="dossier_projet" name="dossier_projet" accept=".pdf" required>
+                            <div class="error-message" id="dossier_projet-error">Veuillez importer le resumé de votre projet</div>
                         </div>
                         
                         <button type="submit" class="btn-submit">S'inscrire au Hackathon</button>
@@ -52,43 +135,146 @@
         <div id="inscription-message" class="inscription-message"></div>
 
 
+        <script>
 
-<script>
+            // Charger les infos hackathon depuis l’API
+            fetch("/api/hackathon/")
+                .then(response => response.json())
+                .then(data => {
+                    if (!data.error) {
+                        hackathonStartDate = new Date(data.dateOuverture).getTime();
+                        hackathonEndDate = new Date(data.dateFermeture).getTime();
 
-function toggleInscriptionVisibility() {
-    const hackathonStartDate = new Date('2025-09-10T09:00:00').getTime();
-    const hackathonEndDate = new Date('2025-09-10T18:00:00').getTime();
-    const now = new Date().getTime();
+                        toggleInscriptionVisibility();
+                        setInterval(toggleInscriptionVisibility, 1000);
+                    } else {
+                        console.error(data.error);
+                    }
+                })
+                .catch(error => console.error("Erreur AJAX :", error));
 
-    const inscriptionSection = document.getElementById('inscription');
-    const inscriptionButton = document.querySelector('.btn-primary');
-    const inscriptionMessage = document.getElementById('inscription-message');
+            function toggleInscriptionVisibility() {
+                if (!hackathonStartDate || !hackathonEndDate) return;
 
-    if (now >= hackathonStartDate && now <= hackathonEndDate) {
-        // Période active → afficher formulaire + bouton
-        inscriptionSection.style.display = "block";
-        if (inscriptionButton) inscriptionButton.style.display = "inline-block";
-        inscriptionMessage.style.display = "none";
-        inscriptionMessage.textContent = "";
+                const now = new Date().getTime();
 
-    } else if (now < hackathonStartDate) {
-        // Avant le début → masquer formulaire et bouton
-        inscriptionSection.style.display = "none";
-        if (inscriptionButton) inscriptionButton.style.display = "none";
-        inscriptionMessage.style.display = "block";
-        inscriptionMessage.textContent = "⏳ Les inscriptions ne sont pas encore ouvertes. Revenez le 10 septembre à 9h00.";
+                const inscriptionSection = document.getElementById('inscription');
+                const inscriptionButton = document.querySelector('.btn-primary');
+                const inscriptionMessage = document.getElementById('inscription-message');
 
-    } else {
-        // Après la fin → masquer formulaire et bouton
-        inscriptionSection.style.display = "none";
-        if (inscriptionButton) inscriptionButton.style.display = "none";
-        inscriptionMessage.style.display = "block";
-        inscriptionMessage.textContent = "✅ Les inscriptions sont maintenant closes. Merci à tous les participants !";
-    }
-}
+                if (now >= hackathonStartDate && now <= hackathonEndDate) {
+                    // Période active → afficher formulaire + bouton
+                    inscriptionSection.style.display = "block";
+                    if (inscriptionButton) inscriptionButton.style.display = "inline-block";
+                    inscriptionMessage.style.display = "none";
+                    inscriptionMessage.textContent = "";
 
-// Vérification immédiate + mise à jour toutes les minutes
-toggleInscriptionVisibility();
-setInterval(toggleInscriptionVisibility, 1000);
+                } else if (now < hackathonStartDate) {
+                    // Avant le début → masquer formulaire et bouton
+                    inscriptionSection.style.display = "none";
+                    if (inscriptionButton) inscriptionButton.style.display = "none";
+                    inscriptionMessage.style.display = "block";
+                    inscriptionMessage.textContent = "⏳ Les inscriptions ne sont pas encore ouvertes. Revenez à la date prévue.";
 
-</script>
+                } else {
+                    // Après la fin → masquer formulaire et bouton
+                    inscriptionSection.style.display = "none";
+                    if (inscriptionButton) inscriptionButton.style.display = "none";
+                    inscriptionMessage.style.display = "block";
+                    inscriptionMessage.textContent = "✅ Les inscriptions sont maintenant closes. Merci à tous les participants !";
+                }
+            }
+        </script>
+
+
+
+
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const form = document.getElementById("registrationForm");
+            const messageDiv = document.getElementById("succes-message");
+
+            form.addEventListener("submit", function(e) {
+                e.preventDefault();
+
+                const formData = new FormData(form);
+
+                fetch(form.action, {
+                    method: "POST",
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        messageDiv.innerHTML = `
+                            <div style="padding:20px; background:#d4edda; color:#155724; border-radius:8px;">
+                                🎉 ${data.message}
+                            </div>`;
+                        form.reset();
+                    } else {
+                        messageDiv.innerHTML = `
+                            <div style="padding:20px; background:#f8d7da; color:#721c24; border-radius:8px;">
+                                ❌ ${data.message}
+                            </div>`;
+                    }
+                })
+                .catch(error => {
+                    console.error(error);
+                    messageDiv.innerHTML = `
+                        <div style="padding:20px; background:#f8d7da; color:#721c24; border-radius:8px;">
+                            ❌ Une erreur est survenue. Veuillez réessayer.
+                        </div>`;
+                });
+            });
+        });
+    </script>
+
+
+
+
+
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        fetch("/api/list/")
+            .then(response => response.json())
+            .then(data => {
+                const select = document.getElementById("hackaton");
+                select.innerHTML = '<option value="">Sélectionnez le Hackathon</option>';
+                data.forEach(item => {
+                    select.innerHTML += `<option value="${item.id}">${item.theme}</option>`;
+                });
+            })
+            .catch(error => {
+                console.error("Erreur lors du chargement des hackathons :", error);
+            });
+    });
+    </script>
+
+
+    <script>
+        document.getElementById("registrationForm").addEventListener("submit", function(event) {
+            const maxSize = 2 * 1024 * 1024; // 2 Mo en octets
+            let valid = true;
+
+            const cv = document.getElementById("cv");
+            const dossier_projet = document.getElementById("dossier_projet");
+
+            // Reset messages
+            document.getElementById("cv-error").style.display = "none";
+            document.getElementById("dossier_projet-error").style.display = "none";
+
+            if (cv.files[0] && cv.files[0].size > maxSize) {
+                document.getElementById("cv-error").style.display = "block";
+                valid = false;
+            }
+            if (dossier_projet.files[0] && dossier_projet.files[0].size > maxSize) {
+                document.getElementById("dossier_projet-error").style.display = "block";
+                valid = false;
+            }
+
+            if (!valid) {
+                event.preventDefault();
+            }
+        });
+    </script>

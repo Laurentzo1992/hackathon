@@ -1,0 +1,59 @@
+<section id="programme" class="program">
+    <div class="container">
+        <h2 class="fade-in">Programme du Hackathon</h2>
+        <div class="timeline" id="timeline-container">
+            <p>Chargement du programme en cours...</p>
+        </div>
+    </div>
+</section>
+
+
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const container = document.getElementById("timeline-container");
+    container.innerHTML = "<p>Chargement du programme en cours...</p>";
+
+    fetch("/api/programme/")
+        .then(response => response.json())
+        .then(data => {
+            container.innerHTML = ""; // vider message de chargement
+
+            if (data.error) {
+                container.innerHTML = `<p style="color:red;">${data.error}</p>`;
+                return;
+            }
+
+            if (!data.programmes || data.programmes.length === 0) {
+                container.innerHTML = `<p>Aucun programme disponible.</p>`;
+                return;
+            }
+
+            data.programmes.forEach(item => {
+                const div = document.createElement("div");
+                div.classList.add("timeline-item");
+
+                // Conversion de la date
+                const dateStr = new Date(item.dateProgramme).toLocaleDateString("fr-FR", {
+                    weekday: "long",
+                    day: "numeric",
+                    month: "long",
+                    year: "numeric"
+                });
+
+                div.innerHTML = `
+                    <div class="timeline-content">
+                        <div class="timeline-date">${dateStr}</div>
+                        <div class="timeline-title">${item.programme}</div>
+                        <p>${item.description}</p>
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+        })
+        .catch(error => {
+            console.error("Erreur :", error);
+            container.innerHTML = `<p style="color:red;">Impossible de charger le programme.</p>`;
+        });
+});
+</script>
